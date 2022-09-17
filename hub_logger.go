@@ -18,24 +18,36 @@ func (me HubLogger) Hub() string {
 	return me.hub
 }
 
-func (me HubLogger) Log(enm LogEnum, topic string, lsner string) {
+func (me HubLogger) LogDebug(enm LogEnum, topic string, lsner string) {
 	if me.logr != nil {
-		me.logr.Log(enm, me.hub, topic, lsner)
+		me.logr.LogDebug(enm, me.hub, topic, lsner)
 	}
 }
 
-func (me HubLogger) LogErr(enm LogEnum, topic string, lsner string, err any) {
+func (me HubLogger) LogInfo(enm LogEnum, topic string, lsner string) {
 	if me.logr != nil {
-		me.logr.LogErr(enm, me.hub, topic, lsner, err)
+		me.logr.LogInfo(enm, me.hub, topic, lsner)
 	}
 }
 
-func (me HubLogger) LogEvent(enm LogEnum, lsner string, evnt Event) {
+func (me HubLogger) LogError(enm LogEnum, topic string, lsner string, err any) {
 	if me.logr != nil {
-		me.logr.LogEvent(enm, lsner, evnt)
+		me.logr.LogError(enm, me.hub, topic, lsner, err)
 	}
 }
 
-func (me HubLogger) LogEventErr(enm LogEnum, topic string, lsner string, evnt Event, err any) {
-	me.logr.LogEventErr(enm, me.hub, topic, lsner, evnt, err)
+func (me HubLogger) LogEventDebug(enm LogEnum, lsner string, evnt Event) {
+	if me.logr != nil {
+		me.logr.LogEventDebug(enm, lsner, evnt)
+	}
+}
+
+func (me HubLogger) LogEventInfo(enm LogEnum, lsner string, evnt Event) {
+	if me.logr != nil {
+		me.logr.LogEventInfo(enm, lsner, evnt)
+	}
+}
+
+func (me HubLogger) LogEventError(enm LogEnum, lsner string, evnt Event, err any) {
+	me.logr.LogEventError(enm, lsner, evnt, err)
 }

@@ -19,15 +19,15 @@ func NewEventListener[K any](name string, lsner Listener[K], qSize int, topicLog
 }
 
 func (me *EventListener[K]) Stop(stopEvnt Event) {
-	me.logr.LogEvent(ListenerCloseBegin, stopEvnt)
+	me.logr.LogEventInfo(ListenerCloseBegin, stopEvnt)
 	me.q <- stopEvnt
 }
 
 func (me *EventListener[K]) Start() {
 	go func() {
 		for evnt := range me.q {
-			if evnt.IsClose() {
-				me.logr.LogEvent(ListenerCloseOk, evnt)
+			if evnt.Close {
+				me.logr.LogEventInfo(ListenerCloseOk, evnt)
 				break
 			}
 
@@ -41,16 +41,16 @@ func (me *EventListener[K]) onEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(EventHandleErr, evnt, p)
+			logr.LogEventError(EventHandleErr, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(EventHandleBegin, evnt)
+	logr.LogEventDebug(EventHandleBegin, evnt)
 
-	var dat K = evnt.dat.(K)
+	var dat K = evnt.Data.(K)
 	me.lsner(dat)
 
-	logr.LogEvent(EventHandleOk, evnt)
+	logr.LogEventDebug(EventHandleOk, evnt)
 }
 
 func (me *EventListener[K]) SendEvent(evnt Event) {
@@ -58,11 +58,11 @@ func (me *EventListener[K]) SendEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(EventSendErr, evnt, p)
+			logr.LogEventError(EventSendErr, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(EventSendBegin, evnt)
+	logr.LogEventDebug(EventSendBegin, evnt)
 	me.q <- evnt
-	logr.LogEvent(EventSendOk, evnt)
+	logr.LogEventDebug(EventSendOk, evnt)
 }

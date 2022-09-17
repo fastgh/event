@@ -11,7 +11,7 @@ type MyEvent struct {
 }
 
 func main() {
-	myHub := event.NewHub("", nil)
+	myHub := event.NewHub("default", event.NewDefaultGlobalStdLogger())
 
 	myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
 

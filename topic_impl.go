@@ -55,7 +55,7 @@ func (me *TopicImpl[K]) Sub(name string, lsner Listener[K], qSize int) int {
 	lsners := me.lsners
 	for i, existingItm := range lsners {
 		if existingItm.name == name {
-			logr.LogErr(ListenerSubErr, name, fmt.Sprintf("duplicated listener on #%d", i))
+			logr.LogError(ListenerSubErr, name, fmt.Sprintf("duplicated listener on #%d", i))
 			return -1
 		}
 	}
@@ -67,7 +67,7 @@ func (me *TopicImpl[K]) Sub(name string, lsner Listener[K], qSize int) int {
 	me.lsners = lsners
 	me.waitG.Add(1)
 
-	logr.Log(ListenerSubOk, name)
+	logr.LogInfo(ListenerSubOk, name)
 	return len(lsners)
 }
 
@@ -81,7 +81,7 @@ func (me *TopicImpl[K]) UnSub(name string) bool {
 	for i, existingLsner := range lsners {
 		if existingLsner.name == name {
 			me.lsners = append(lsners[:i], lsners[i+1])
-			logr.Log(ListenerUnsubOk, name)
+			logr.LogInfo(ListenerUnsubOk, name)
 
 			stopEvent := NewCloseEvent(me.NewEventId(), me.Hub().Name(), me.name)
 			me.stopListener(existingLsner, stopEvent)
@@ -89,7 +89,7 @@ func (me *TopicImpl[K]) UnSub(name string) bool {
 		}
 	}
 
-	logr.LogErr(ListenerUnsubErr, name, "not found")
+	logr.LogError(ListenerUnsubErr, name, "not found")
 	return false
 }
 
@@ -108,20 +108,20 @@ func (me *TopicImpl[K]) doPub(evntData K) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogErr(EventPubErr, "", p)
+			logr.LogError(EventPubErr, "", p)
 		}
 	}()
 
 	me.mx.RLock()
 	defer me.mx.RUnlock()
 
-	logr.LogEvent(EventPubBegin, "", evnt)
+	logr.LogEventDebug(EventPubBegin, "", evnt)
 
 	for _, lsner := range me.lsners {
 		lsner.SendEvent(evnt)
 	}
 
-	logr.LogEvent(EventPubOk, "", evnt)
+	logr.LogEventDebug(EventPubOk, "", evnt)
 }
 
 func (me *TopicImpl[K]) Close(wait bool) {
@@ -131,7 +131,7 @@ func (me *TopicImpl[K]) Close(wait bool) {
 	stopEvnt := NewCloseEvent(me.NewEventId(), me.Hub().Name(), me.name)
 
 	logr := me.logr
-	logr.LogEvent(TopicCloseBegin, "", stopEvnt)
+	logr.LogEventDebug(TopicCloseBegin, "", stopEvnt)
 
 	for _, lsner := range me.lsners {
 		me.stopListener(lsner, stopEvnt)
@@ -141,7 +141,7 @@ func (me *TopicImpl[K]) Close(wait bool) {
 		me.waitG.Wait()
 	}
 
-	logr.LogEvent(TopicCloseOk, "", stopEvnt)
+	logr.LogEventDebug(TopicCloseOk, "", stopEvnt)
 }
 
 func (me *TopicImpl[K]) stopListener(lsner *EventListener[K], stopEvnt Event) {

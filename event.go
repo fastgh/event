@@ -1,53 +1,47 @@
 package event
 
+import (
+	"encoding/json"
+
+	"github.com/pkg/errors"
+)
+
 type EventId int64
 
 type EventT struct {
-	id    EventId
-	hub   string
-	topic string
-	cloz  bool
-	dat   any
+	Id    EventId
+	Hub   string
+	Topic string
+	Close bool
+	Data  any
 }
 
 type Event = *EventT
 
 func NewDataEvent(id EventId, hub string, topic string, dat any) Event {
 	return &EventT{
-		id:    id,
-		hub:   hub,
-		topic: topic,
-		dat:   dat,
-		cloz:  false,
+		Id:    id,
+		Hub:   hub,
+		Topic: topic,
+		Data:  dat,
+		Close: false,
 	}
 }
 
 func NewCloseEvent(id EventId, hub string, topic string) Event {
 	return &EventT{
-		id:    id,
-		hub:   hub,
-		topic: topic,
-		dat:   nil,
-		cloz:  true,
+		Id:    id,
+		Hub:   hub,
+		Topic: topic,
+		Data:  nil,
+		Close: true,
 	}
 }
 
-func (me Event) IsClose() bool {
-	return me.cloz
-}
-
-func (me Event) Id() EventId {
-	return me.id
-}
-
-func (me Event) Data() any {
-	return me.dat
-}
-
-func (me Event) Hub() string {
-	return me.hub
-}
-
-func (me Event) Topic() string {
-	return me.topic
+func (me Event) String() string {
+	bytes, err := json.Marshal(me)
+	if err != nil {
+		panic(errors.Wrap(err, "failed to marshal event"))
+	}
+	return string(bytes)
 }

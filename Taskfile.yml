@@ -17,13 +17,15 @@ tasks:
   gen:
     desc: generate sources, for ex. enum.
     cmds:
-      - enumer -gqlgen -json -sql -text -yaml -type LogEnum -output log_enum_generated.go
+      - enumer -gqlgen -json -sql -text -yaml -type LogEnum -output log_enum_generated.go -transform whitespace
+      - enumer -gqlgen -json -sql -text -yaml -type LogLevel -output log_level_generated.go -trimprefix LogLevel -transform upper
   
   mod:
     desc: Downloads and tidy Go modules
     cmds:
       - go mod download
       - go mod tidy
+      - go mod vendor
 
   lint:
     desc: Runs golangci-lint

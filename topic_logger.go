@@ -16,18 +16,25 @@ func NewTopicLogger(topic string, logr HubLogger) TopicLogger {
 
 func (me TopicLogger) Topic() string { return me.topic }
 
-func (me TopicLogger) Log(enm LogEnum, lsner string) {
-	me.logr.Log(enm, me.topic, lsner)
+func (me TopicLogger) LogDebug(enm LogEnum, lsner string) {
+	me.logr.LogDebug(enm, me.topic, lsner)
 }
 
-func (me TopicLogger) LogEvent(enm LogEnum, lsner string, evnt Event) {
-	me.logr.LogEvent(enm, lsner, evnt)
+func (me TopicLogger) LogInfo(enm LogEnum, lsner string) {
+	me.logr.LogInfo(enm, me.topic, lsner)
 }
 
-func (me TopicLogger) LogErr(enm LogEnum, lsner string, err any) {
-	me.logr.LogErr(enm, me.topic, lsner, err)
+func (me TopicLogger) LogError(enm LogEnum, lsner string, err any) {
+	me.logr.LogError(enm, me.topic, lsner, err)
+}
+func (me TopicLogger) LogEventDebug(enm LogEnum, lsner string, evnt Event) {
+	me.logr.LogEventDebug(enm, lsner, evnt)
 }
 
-func (me TopicLogger) LogEventErr(enm LogEnum, lsner string, evnt Event, err any) {
-	me.logr.LogEventErr(enm, me.topic, lsner, evnt, err)
+func (me TopicLogger) LogEventInfo(enm LogEnum, lsner string, evnt Event) {
+	me.logr.LogEventInfo(enm, lsner, evnt)
+}
+
+func (me TopicLogger) LogEventError(enm LogEnum, lsner string, evnt Event, err any) {
+	me.logr.LogEventError(enm, lsner, evnt, err)
 }

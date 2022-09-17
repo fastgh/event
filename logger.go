@@ -1,9 +1,23 @@
 package event
 
-type Logger interface {
-	Log(enm LogEnum, hub string, topic string, lsner string)
-	LogErr(enm LogEnum, hub string, topic string, lsner string, err any)
+type LogLevel int8
 
-	LogEvent(enm LogEnum, lsner string, evnt Event)
-	LogEventErr(enm LogEnum, hub string, topic string, lsner string, evnt Event, err any)
+const (
+	LogLevelAnyway LogLevel = iota
+
+	LogLevelDebug
+	LogLevelInfo
+	LogLevelError
+
+	LogLevelSilient LogLevel = 127
+)
+
+type Logger interface {
+	LogDebug(enm LogEnum, hub string, topic string, lsner string)
+	LogInfo(enm LogEnum, hub string, topic string, lsner string)
+	LogError(enm LogEnum, hub string, topic string, lsner string, err any)
+
+	LogEventDebug(enm LogEnum, lsner string, evnt Event)
+	LogEventInfo(enm LogEnum, lsner string, evnt Event)
+	LogEventError(enm LogEnum, lsner string, evnt Event, err any)
 }
