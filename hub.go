@@ -9,7 +9,7 @@ import (
 type HubT struct {
 	name   string
 	mutex  sync.RWMutex
-	topics map[string]any
+	topics map[string]TopicBase
 	logger Logger
 }
 
@@ -19,7 +19,7 @@ func NewHub(name string, logger Logger) Hub {
 	return &HubT{
 		name:   name,
 		mutex:  sync.RWMutex{},
-		topics: map[string]any{},
+		topics: map[string]TopicBase{},
 		logger: logger,
 	}
 }
@@ -28,14 +28,15 @@ func (me Hub) Name() string { return me.name }
 
 func CreateTopic[K any](hub Hub, name string, eventExample K, logger Logger) Topic[K] {
 	r := NewTopic(name, eventExample, logger)
-	hub.createTopic(name, r)
+	hub.registerTopic(r)
 	return r
 }
 
-func (me Hub) createTopic(name string, topic any) {
+func (me Hub) registerTopic(topic TopicBase) {
 	me.mutex.Lock()
 	defer me.mutex.Unlock()
 
+	name := topic.Name()
 	_, has := me.topics[name]
 	if has {
 		panic(fmt.Errorf("topic %s already exists", name))
@@ -52,14 +53,19 @@ func (me Hub) HasTopic(name string) bool {
 	return has
 }
 
-func (me Hub) GetTopic(name string, eventExample any) any {
+func GetTopic[K any](me Hub, name string, eventExample K) Topic[K] {
+	r := me.GetTopic(name, eventExample)
+	return r.(Topic[K])
+}
+
+func (me Hub) GetTopic(name string, eventExample any) TopicBase {
 	me.mutex.RLock()
 	defer me.mutex.RUnlock()
 
 	r, has := me.topics[name]
 	if has {
 		expected := reflect.TypeOf(eventExample)
-		actual := r.(Topic[any]).EventType()
+		actual := r.EventType()
 		if expected != actual {
 			panic(fmt.Errorf("expected topic event type is %v, however, the actual one is %v", expected, actual))
 		}
@@ -68,10 +74,11 @@ func (me Hub) GetTopic(name string, eventExample any) any {
 	return r
 }
 
-func GetTopic[K any](hub Hub, name string, eventExample K) Topic[K] {
-	r := hub.GetTopic(name, eventExample)
-	if r == nil {
-		return nil
+func (me Hub) Close(wait bool) {
+	me.mutex.RLock()
+	defer me.mutex.RUnlock()
+
+	for _, topic := range me.topics {
+		topic.Close(wait)
 	}
-	return r.(Topic[K])
 }

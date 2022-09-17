@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/fastgh/event"
 )
@@ -26,5 +25,5 @@ func main() {
 
 	myTopic.Pub(false, MyEvent{"fastgh"})
 
-	time.Sleep(1 * time.Second)
+	myHub.Close(true)
 }
