@@ -41,16 +41,16 @@ func (me *EventListener[K]) onEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(ErrHandleFailed, evnt, p)
+			logr.LogEventErr(EventHandleErr, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(HandleBegin, evnt)
+	logr.LogEvent(EventHandleBegin, evnt)
 
 	var dat K = evnt.dat.(K)
 	me.lsner(dat)
 
-	logr.LogEvent(HandleOk, evnt)
+	logr.LogEvent(EventHandleOk, evnt)
 }
 
 func (me *EventListener[K]) SendEvent(evnt Event) {
@@ -58,11 +58,11 @@ func (me *EventListener[K]) SendEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(ErrSendFailed, evnt, p)
+			logr.LogEventErr(EventSendErr, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(SendBegin, evnt)
+	logr.LogEvent(EventSendBegin, evnt)
 	me.q <- evnt
-	logr.LogEvent(SendOk, evnt)
+	logr.LogEvent(EventSendOk, evnt)
 }

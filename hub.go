@@ -26,7 +26,7 @@ func (me Hub) RegisterTopic(topic TopicBase) {
 	defer me.mx.Unlock()
 
 	nm := topic.Name()
-	logr.Log(RegisterTopicBegin, nm, "")
+	logr.Log(TopicRegisterBegin, nm, "")
 
 	if _, has := me.topics[nm]; has {
 		panic(fmt.Errorf("duplicated topic '%s'", nm))
@@ -34,7 +34,7 @@ func (me Hub) RegisterTopic(topic TopicBase) {
 
 	me.topics[nm] = topic
 
-	logr.Log(RegisterTopicOk, nm, "")
+	logr.Log(TopicRegisterOk, nm, "")
 }
 
 func (me Hub) HasTopic(name string) bool {
@@ -67,11 +67,11 @@ func (me Hub) Close(wait bool) {
 	me.mx.RLock()
 	defer me.mx.RUnlock()
 
-	logr.Log(CloseHubBegin, "", "")
+	logr.Log(HubCloseBegin, "", "")
 
 	for _, tp := range me.topics {
 		tp.Close(wait)
 	}
 
-	logr.Log(CloseHubOk, "", "")
+	logr.Log(HubCloseOk, "", "")
 }
