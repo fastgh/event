@@ -17,7 +17,7 @@ tasks:
   gen:
     desc: generate sources, for ex. enum.
     cmds:
-      - enumer -gqlgen -json -sql -text -yaml -values -type LogEnum -output log_enum_generated.go
+      - enumer -gqlgen -json -sql -text -yaml -type LogEnum -output log_enum_generated.go
   
   mod:
     desc: Downloads and tidy Go modules
