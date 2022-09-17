@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fastgh/event"
+	"github.com/fastgh/event/loggers"
 )
 
 type MyEvent struct {
@@ -11,7 +12,7 @@ type MyEvent struct {
 }
 
 func main() {
-	myHub := event.NewHub("default", event.NewDefaultGlobalStdLogger())
+	myHub := event.NewHub("default", loggers.NewDefaultGlobalStdLogger())
 
 	myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
 

@@ -52,23 +52,23 @@ func (me *TopicImpl[K]) Sub(name string, lsner Listener[K], qSize int) int {
 	me.mx.Lock()
 	defer me.mx.Unlock()
 
-	lsners := me.lsners
-	for i, existingItm := range lsners {
-		if existingItm.name == name {
+	evntLsners := me.lsners
+	for i, existing := range evntLsners {
+		if existing.name == name {
 			logr.LogError(ListenerSubErr, name, fmt.Sprintf("duplicated listener on #%d", i))
 			return -1
 		}
 	}
 
-	itm := NewEventListener(name, lsner, qSize, logr)
-	itm.Start()
+	evntLsner := NewEventListener(name, lsner, qSize, logr)
+	evntLsner.Start()
 
-	lsners = append(lsners, itm)
-	me.lsners = lsners
+	evntLsners = append(evntLsners, evntLsner)
+	me.lsners = evntLsners
 	me.waitG.Add(1)
 
 	logr.LogInfo(ListenerSubOk, name)
-	return len(lsners)
+	return len(evntLsners)
 }
 
 func (me *TopicImpl[K]) UnSub(name string) bool {
@@ -78,13 +78,13 @@ func (me *TopicImpl[K]) UnSub(name string) bool {
 	defer me.mx.Unlock()
 
 	lsners := me.lsners
-	for i, existingLsner := range lsners {
-		if existingLsner.name == name {
+	for i, existing := range lsners {
+		if existing.name == name {
 			me.lsners = append(lsners[:i], lsners[i+1])
 			logr.LogInfo(ListenerUnsubOk, name)
 
 			stopEvent := NewCloseEvent(me.NewEventId(), me.Hub().Name(), me.name)
-			me.stopListener(existingLsner, stopEvent)
+			me.stopListener(existing, stopEvent)
 			return true
 		}
 	}
