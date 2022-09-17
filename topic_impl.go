@@ -49,7 +49,7 @@ func (me *TopicImpl[K]) Sub(name string, lisner Listener[K], queueSize int) int 
 
 	items := me.listenerItems
 	for i, existingItem := range items {
-		if existingItem.IsSame(lisner) {
+		if existingItem.name == name {
 			lgr.Info(LogTypeListenerSubFailed, fmt.Sprintf("listener '%s' is duplicated on #%d", name, i))
 			return -1
 		}
@@ -66,11 +66,7 @@ func (me *TopicImpl[K]) Sub(name string, lisner Listener[K], queueSize int) int 
 	return len(items)
 }
 
-func (me *TopicImpl[K]) UnSub(lisner Listener[K]) bool {
-	if lisner == nil {
-		panic(errors.New("listener cannot be nil"))
-	}
-
+func (me *TopicImpl[K]) UnSub(name string) bool {
 	lgr := me.logger
 
 	me.mutex.Lock()
@@ -78,7 +74,7 @@ func (me *TopicImpl[K]) UnSub(lisner Listener[K]) bool {
 
 	items := me.listenerItems
 	for i, existingItem := range items {
-		if existingItem.IsSame(lisner) {
+		if existingItem.name == name {
 			me.listenerItems = append(items[:i], items[i+1])
 			lgr.Info(LogTypeListenerUnSubOk, fmt.Sprint("removed ", existingItem))
 
@@ -87,7 +83,7 @@ func (me *TopicImpl[K]) UnSub(lisner Listener[K]) bool {
 		}
 	}
 
-	lgr.Info(LogTypeListenerUnSubFailed, fmt.Sprintf("listener %v is not found", lisner))
+	lgr.Info(LogTypeListenerUnSubFailed, fmt.Sprintf("listener %v is not found", name))
 	return false
 }
 

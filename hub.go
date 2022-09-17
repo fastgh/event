@@ -26,7 +26,13 @@ func NewHub(name string, logger Logger) Hub {
 
 func (me Hub) Name() string { return me.name }
 
-func (me Hub) CreateTopic(name string, eventExample any, logger Logger) any {
+func CreateTopic[K any](hub Hub, name string, eventExample K, logger Logger) Topic[K] {
+	r := NewTopic(name, eventExample, logger)
+	hub.createTopic(name, r)
+	return r
+}
+
+func (me Hub) createTopic(name string, topic any) {
 	me.mutex.Lock()
 	defer me.mutex.Unlock()
 
@@ -35,10 +41,7 @@ func (me Hub) CreateTopic(name string, eventExample any, logger Logger) any {
 		panic(fmt.Errorf("topic %s already exists", name))
 	}
 
-	r := NewTopic(name, eventExample, logger)
-	me.topics[name] = r
-
-	return r
+	me.topics[name] = topic
 }
 
 func (me Hub) HasTopic(name string) bool {
@@ -71,8 +74,4 @@ func GetTopic[K any](hub Hub, name string, eventExample K) Topic[K] {
 		return nil
 	}
 	return r.(Topic[K])
-}
-
-func CreateTopic[K any](hub Hub, name string, eventExample any, logger Logger) Topic[K] {
-	return hub.CreateTopic(name, eventExample, logger).(Topic[K])
 }

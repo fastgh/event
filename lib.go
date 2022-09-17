@@ -42,7 +42,7 @@ type Topic[K any] interface {
 	EventType() reflect.Type
 
 	Sub(name string, lisner Listener[K], queueSize int) int
-	UnSub(lisner Listener[K]) bool
+	UnSub(name string) bool
 	Pub(async bool, evnt K)
 }
 

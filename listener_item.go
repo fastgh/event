@@ -29,10 +29,6 @@ func NewListenerItem[K any](index int, name string, listener Listener[K], queueS
 
 func (me *ListenerItem[K]) String() string { return me.desc }
 
-func (me *ListenerItem[K]) IsSame(that Listener[K]) bool {
-	return me.listener == that
-}
-
 func (me *ListenerItem[K]) Stop() {
 	me.queue <- &QueueData[K]{closed: true}
 }
@@ -61,7 +57,7 @@ func (me *ListenerItem[K]) onEvent(data *QueueData[K]) {
 	}()
 
 	lgr.Info(LogTypeListenerBegin, fmt.Sprint("begin to send event to ", me))
-	me.listener.On(data.event)
+	(me.listener).On(data.event)
 	lgr.Info(LogTypeListenerOk, fmt.Sprint("successfully send event to ", me))
 }
 
