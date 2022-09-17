@@ -18,13 +18,13 @@ func NewStdLogger(target *log.Logger) StdLogger {
 	}
 }
 
-func NewDefaultStdLogger(target *log.Logger) LevelFilteringLogger {
-	return NewLevelFilteringLogger(event.LogLevelInfo, &StdLoggerT{
+func NewDefaultStdLogger(target *log.Logger) event.LevelFilteringLogger {
+	return event.NewLevelFilteringLogger(event.LogLevelInfo, &StdLoggerT{
 		target: target,
 	})
 }
 
-func NewDefaultGlobalStdLogger() LevelFilteringLogger {
+func NewDefaultGlobalStdLogger() event.LevelFilteringLogger {
 	return NewDefaultStdLogger(log.Default())
 }
 

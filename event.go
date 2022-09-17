@@ -2,7 +2,9 @@ package event
 
 import (
 	"encoding/json"
+	"fmt"
 
+	phuslu "github.com/phuslu/log"
 	"github.com/pkg/errors"
 )
 
@@ -44,4 +46,24 @@ func (me Event) String() string {
 		panic(errors.Wrap(err, "failed to marshal event"))
 	}
 	return string(bytes)
+}
+
+func (me Event) MarshalObject(entry *phuslu.Entry) {
+	entry.Int64("id", int64(me.Id)).
+		Str("hub", me.Hub).
+		Str("topic", me.Topic).
+		Bool("close", me.Close)
+
+	dat := me.Data
+	if dat == nil {
+		return
+	}
+
+	datStr, is := dat.(string)
+	if is {
+		entry.Str("data", datStr)
+		return
+	}
+
+	entry.Str("data", fmt.Sprintf("%v", dat))
 }

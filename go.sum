@@ -1,2 +1,4 @@
+github.com/phuslu/log v1.0.81 h1:07l/g+gde7oD77iCHXst/0iSu40BbcEkvv4pTeQCe+c=
+github.com/phuslu/log v1.0.81/go.mod h1:kzJN3LRifrepxThMjufQwS7S35yFAB+jAV1qgA7eBW4=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
