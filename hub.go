@@ -15,15 +15,6 @@ type HubT struct {
 
 type Hub = *HubT
 
-func NewHub(name string, logr Logger) Hub {
-	return &HubT{
-		name:   name,
-		mx:     sync.RWMutex{},
-		topics: map[string]TopicBase{},
-		logr:   NewHubLogger(name, logr),
-	}
-}
-
 func (me Hub) Logger() HubLogger { return me.logr }
 
 func (me Hub) Name() string { return me.name }
@@ -35,7 +26,7 @@ func (me Hub) RegisterTopic(topic TopicBase) {
 	defer me.mx.Unlock()
 
 	nm := topic.Name()
-	logr.LogInfo(LogMsgRegisterTopicBegin, nm, "")
+	logr.Log(RegisterTopicBegin, nm, "")
 
 	if _, has := me.topics[nm]; has {
 		panic(fmt.Errorf("duplicated topic '%s'", nm))
@@ -43,7 +34,7 @@ func (me Hub) RegisterTopic(topic TopicBase) {
 
 	me.topics[nm] = topic
 
-	logr.LogInfo(LogMsgRegisterTopicOk, nm, "")
+	logr.Log(RegisterTopicOk, nm, "")
 }
 
 func (me Hub) HasTopic(name string) bool {
@@ -76,11 +67,11 @@ func (me Hub) Close(wait bool) {
 	me.mx.RLock()
 	defer me.mx.RUnlock()
 
-	logr.LogInfo(LogMsgCloseHubBegin, "", "")
+	logr.Log(CloseHubBegin, "", "")
 
 	for _, tp := range me.topics {
 		tp.Close(wait)
 	}
 
-	logr.LogInfo(LogMsgCloseHubOk, "", "")
+	logr.Log(CloseHubOk, "", "")
 }

@@ -1,52 +1,53 @@
 package event
 
-type LogMsg int
+type MsgLogEnum int
 
 const (
-	LogMsgSubOk LogMsg = iota
-	LogMsgUnSubOk
+	SubOk MsgLogEnum = iota
+	UnSubOk
 
-	LogMsgRegisterTopicBegin
-	LogMsgRegisterTopicOk
+	RegisterTopicBegin
+	RegisterTopicOk
 
-	LogMsgCloseHubBegin
-	LogMsgCloseHubOk
+	CloseHubBegin
+	CloseHubOk
 )
 
-type LogEvent int
+type EventLogEnum int
 
 const (
-	LogEventPubBegin LogEvent = iota
-	LogEventPubOk
+	PubBegin EventLogEnum = iota
+	PubOk
 
-	LogEventSendBegin
-	LogEventSendOk
+	SendBegin
+	SendOk
 
-	LogEventHandleBegin
-	LogEventHandleOk
+	HandleBegin
+	HandleOk
 
-	LogEventTopicCloseBegin
-	LogEventTopicCloseOk
+	TopicCloseBegin
+	TopicCloseOk
 
-	LogEventListenerCloseBegin
-	LogEventListenerCloseOk
+	ListenerCloseBegin
+	ListenerCloseOk
 )
 
-type LogErr int
+type ErrLogEnum int
 
 const (
-	LogErrSubFailed LogErr = iota
-	LogErrUnSubFailed
+	ErrSubFailed ErrLogEnum = iota
+	ErrUnSubFailed
 
-	LogErrPubFailed
-	LogErrSendFailed
+	ErrPubFailed
+	ErrSendFailed
 
-	LogErrHandleFailed
+	ErrHandleFailed
 )
 
 type Logger interface {
-	LogInfo(typ LogMsg, hub string, topic string, lisner string)
-	LogEvent(typ LogEvent, lisner string, evnt Event)
-	LogErr(typ LogErr, hub string, topic string, lisner string, err any)
-	LogEventErr(typ LogErr, hub string, topic string, lisner string, evnt Event, err any)
+	Log(enm MsgLogEnum, hub string, topic string, lisner string)
+	LogErr(enm ErrLogEnum, hub string, topic string, lisner string, err any)
+
+	LogEvent(enm EventLogEnum, lisner string, evnt Event)
+	LogEventErr(enm ErrLogEnum, hub string, topic string, lisner string, evnt Event, err any)
 }

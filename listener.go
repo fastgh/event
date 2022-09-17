@@ -3,23 +3,23 @@ package event
 type Listener[K any] func(evnt K)
 
 type EventListener[K any] struct {
-	name   string
-	lisner Listener[K]
-	q      chan Event
-	logr   ListenerLogger
+	name  string
+	lsner Listener[K]
+	q     chan Event
+	logr  ListenerLogger
 }
 
 func NewEventListener[K any](name string, lsner Listener[K], qSize int, topicLogr TopicLogger) *EventListener[K] {
 	return &EventListener[K]{
-		name:   name,
-		lisner: lsner,
-		q:      make(chan Event, qSize),
-		logr:   NewListenerLogger(name, topicLogr),
+		name:  name,
+		lsner: lsner,
+		q:     make(chan Event, qSize),
+		logr:  NewListenerLogger(name, topicLogr),
 	}
 }
 
 func (me *EventListener[K]) Stop(stopEvnt Event) {
-	me.logr.LogEvent(LogEventListenerCloseBegin, stopEvnt)
+	me.logr.LogEvent(ListenerCloseBegin, stopEvnt)
 	me.q <- stopEvnt
 }
 
@@ -27,7 +27,7 @@ func (me *EventListener[K]) Start() {
 	go func() {
 		for evnt := range me.q {
 			if evnt.IsClose() {
-				me.logr.LogEvent(LogEventListenerCloseOk, evnt)
+				me.logr.LogEvent(ListenerCloseOk, evnt)
 				break
 			}
 
@@ -41,16 +41,16 @@ func (me *EventListener[K]) onEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(LogErrHandleFailed, evnt, p)
+			logr.LogEventErr(ErrHandleFailed, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(LogEventHandleBegin, evnt)
+	logr.LogEvent(HandleBegin, evnt)
 
 	var dat K = evnt.dat.(K)
-	me.lisner(dat)
+	me.lsner(dat)
 
-	logr.LogEvent(LogEventHandleOk, evnt)
+	logr.LogEvent(HandleOk, evnt)
 }
 
 func (me *EventListener[K]) SendEvent(evnt Event) {
@@ -58,11 +58,11 @@ func (me *EventListener[K]) SendEvent(evnt Event) {
 
 	defer func() {
 		if p := recover(); p != nil {
-			logr.LogEventErr(LogErrSendFailed, evnt, p)
+			logr.LogEventErr(ErrSendFailed, evnt, p)
 		}
 	}()
 
-	logr.LogEvent(LogEventSendBegin, evnt)
+	logr.LogEvent(SendBegin, evnt)
 	me.q <- evnt
-	logr.LogEvent(LogEventSendOk, evnt)
+	logr.LogEvent(SendOk, evnt)
 }
