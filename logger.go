@@ -1,50 +1,52 @@
 package event
 
-type LogType int
+type LogMsg int
 
 const (
-	LogTypeListenerSubOk LogType = iota
-	LogTypeListenerSubFailed
-	LogTypeListenerUnSubOk
-	LogTypeListenerUnSubFailed
+	LogMsgSubOk LogMsg = iota
+	LogMsgUnSubOk
 
-	LogTypePubBegin
-	LogTypePubOk
-	LogTypePubFailed
+	LogMsgRegisterTopicBegin
+	LogMsgRegisterTopicOk
 
-	LogTypeListenerBegin
-	LogTypeListenerOk
-	LogTypeListenerFailed
-	LogTypeListenerQueueClosed
+	LogMsgCloseHubBegin
+	LogMsgCloseHubOk
+)
+
+type LogEvent int
+
+const (
+	LogEventPubBegin LogEvent = iota
+	LogEventPubOk
+
+	LogEventSendBegin
+	LogEventSendOk
+
+	LogEventHandleBegin
+	LogEventHandleOk
+
+	LogEventTopicCloseBegin
+	LogEventTopicCloseOk
+
+	LogEventListenerCloseBegin
+	LogEventListenerCloseOk
+)
+
+type LogErr int
+
+const (
+	LogErrSubFailed LogErr = iota
+	LogErrUnSubFailed
+
+	LogErrPubFailed
+	LogErrSendFailed
+
+	LogErrHandleFailed
 )
 
 type Logger interface {
-	logInfo(name string, typ LogType, eventId uint32, msg string)
-	logError(name string, typ LogType, eventId uint32, err any, msg string)
-}
-
-type LoggerAdapter[K any] struct {
-	topic  Topic[K]
-	logger Logger
-}
-
-func NewLoggerAdapter[K any](topic Topic[K], logger Logger) *LoggerAdapter[K] {
-	return &LoggerAdapter[K]{
-		topic:  topic,
-		logger: logger,
-	}
-}
-
-func (me *LoggerAdapter[K]) Info(typ LogType, msg string) {
-	if me.logger != nil {
-		t := me.topic
-		me.logger.logInfo(t.Name(), typ, t.EventId(), msg)
-	}
-}
-
-func (me *LoggerAdapter[K]) Error(typ LogType, err any, msg string) {
-	if me.logger != nil {
-		t := me.topic
-		me.logger.logError(t.Name(), typ, t.EventId(), err, msg)
-	}
+	LogInfo(typ LogMsg, hub string, topic string, lisner string)
+	LogEvent(typ LogEvent, lisner string, evnt Event)
+	LogErr(typ LogErr, hub string, topic string, lisner string, err any)
+	LogEventErr(typ LogErr, hub string, topic string, lisner string, evnt Event, err any)
 }

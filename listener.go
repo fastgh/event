@@ -1,78 +1,68 @@
 package event
 
-import "fmt"
-
 type Listener[K any] func(evnt K)
 
-type QueueData[K any] struct {
-	event  K
-	closed bool
+type EventListener[K any] struct {
+	name   string
+	lisner Listener[K]
+	q      chan Event
+	logr   ListenerLogger
 }
 
-type ListenerItem[K any] struct {
-	index    int
-	name     string
-	desc     string
-	listener Listener[K]
-	queue    chan *QueueData[K]
-	logger   *LoggerAdapter[K]
-}
-
-func NewListenerItem[K any](index int, name string, listener Listener[K], queueSize int, logger *LoggerAdapter[K]) *ListenerItem[K] {
-	return &ListenerItem[K]{
-		index:    index,
-		name:     name,
-		desc:     fmt.Sprintf("listener '%s'(#%d)", name, index),
-		listener: listener,
-		queue:    make(chan *QueueData[K], queueSize),
-		logger:   logger,
+func NewEventListener[K any](name string, lsner Listener[K], qSize int, topicLogr TopicLogger) *EventListener[K] {
+	return &EventListener[K]{
+		name:   name,
+		lisner: lsner,
+		q:      make(chan Event, qSize),
+		logr:   NewListenerLogger(name, topicLogr),
 	}
 }
 
-func (me *ListenerItem[K]) String() string { return me.desc }
-
-func (me *ListenerItem[K]) Stop() {
-	me.queue <- &QueueData[K]{closed: true}
+func (me *EventListener[K]) Stop(stopEvnt Event) {
+	me.logr.LogEvent(LogEventListenerCloseBegin, stopEvnt)
+	me.q <- stopEvnt
 }
 
-func (me *ListenerItem[K]) Start() {
+func (me *EventListener[K]) Start() {
 	go func() {
-		for data := range me.queue {
-			if data.closed {
+		for evnt := range me.q {
+			if evnt.IsClose() {
+				me.logr.LogEvent(LogEventListenerCloseOk, evnt)
 				break
 			}
 
-			me.onEvent(data)
+			me.onEvent(evnt)
 		}
-
-		me.logger.Info(LogTypeListenerQueueClosed, fmt.Sprint("closed queue for", me))
 	}()
 }
 
-func (me *ListenerItem[K]) onEvent(data *QueueData[K]) {
-	lgr := me.logger
+func (me *EventListener[K]) onEvent(evnt Event) {
+	logr := me.logr
 
 	defer func() {
 		if p := recover(); p != nil {
-			lgr.Error(LogTypeListenerFailed, p, fmt.Sprint("failed to send event to", me))
+			logr.LogEventErr(LogErrHandleFailed, evnt, p)
 		}
 	}()
 
-	lgr.Info(LogTypeListenerBegin, fmt.Sprint("begin to send event to", me))
-	me.listener(data.event)
-	lgr.Info(LogTypeListenerOk, fmt.Sprint("successfully send event to ", me))
+	logr.LogEvent(LogEventHandleBegin, evnt)
+
+	var dat K = evnt.dat.(K)
+	me.lisner(dat)
+
+	logr.LogEvent(LogEventHandleOk, evnt)
 }
 
-func (me *ListenerItem[K]) SendEvent(data *QueueData[K]) {
-	lgr := me.logger
+func (me *EventListener[K]) SendEvent(evnt Event) {
+	logr := me.logr
 
 	defer func() {
 		if p := recover(); p != nil {
-			lgr.Error(LogTypeListenerFailed, p, fmt.Sprint("failed to send event to", me))
+			logr.LogEventErr(LogErrSendFailed, evnt, p)
 		}
 	}()
 
-	lgr.Info(LogTypeListenerBegin, fmt.Sprint("begin to send event to", me))
-	me.queue <- data
-	lgr.Info(LogTypeListenerOk, fmt.Sprint("successfully send event to", me))
+	logr.LogEvent(LogEventSendBegin, evnt)
+	me.q <- evnt
+	logr.LogEvent(LogEventSendOk, evnt)
 }
