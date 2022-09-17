@@ -12,7 +12,13 @@ tasks:
     cmds:
       - go install github.com/golang/mock/mockgen@v1.6.0
       - go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0
+      - go install github.com/dmarkham/enumer@v1.5.6
 
+  gen:
+    desc: generate sources, for ex. enum.
+    cmds:
+      - enumer -gqlgen -json -sql -text -yaml -values -type LogEnum
+  
   mod:
     desc: Downloads and tidy Go modules
     cmds:
