@@ -26,8 +26,8 @@ func NewHub(name string, logger Logger) Hub {
 
 func (me Hub) Name() string { return me.name }
 
-func CreateTopic[K any](hub Hub, name string, eventExample K, logger Logger) Topic[K] {
-	r := NewTopic(name, eventExample, logger)
+func CreateTopic[K any](hub Hub, name string, eventExample K) Topic[K] {
+	r := NewTopic(name, eventExample, hub.logger)
 	hub.registerTopic(r)
 	return r
 }

@@ -13,15 +13,15 @@ type MyEvent struct {
 func main() {
 	myHub := event.NewHub("", nil)
 
-	myTopic := event.CreateTopic(myHub, "myEvent", MyEvent{}, nil)
+	myTopic := event.CreateTopic(myHub, "myEvent", MyEvent{})
 
-	myTopic.Sub("listener1", event.ListenerFn[MyEvent](func(e MyEvent) {
+	myTopic.Sub("listener1", func(e MyEvent) {
 		fmt.Println("listener1 - got event from", e)
-	}), 0)
+	}, 0)
 
-	myTopic.Sub("listener2", event.ListenerFn[MyEvent](func(e MyEvent) {
+	myTopic.Sub("listener2", func(e MyEvent) {
 		fmt.Println("listener2 - got event from", e)
-	}), 0)
+	}, 0)
 
 	myTopic.Pub(false, MyEvent{"fastgh"})
 

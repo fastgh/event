@@ -1,0 +1,43 @@
+version: '3'
+
+env:
+  VERSION:
+    sh: git describe --tags --always # or: git log -n 1 --format=%h
+
+output: prefixed
+
+tasks:
+  init:
+    desc: init env, including install dependent tools
+    cmds:
+      - go install github.com/golang/mock/mockgen@v1.6.0
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.49.0
+
+  mod:
+    desc: Downloads and tidy Go modules
+    cmds:
+      - go mod download
+      - go mod tidy
+
+  lint:
+    desc: Runs golangci-lint
+    sources:
+      - './**/*.go'
+    cmds:
+      - golangci-lint run
+
+  build:
+    desc: build
+    cmds:
+      - go build -trimpath .
+
+  run:
+    desc: run examples
+    cmds:
+      - go run ./examples/hello/main.go
+
+  default:
+    desc: run test cases then create coverage report (./coverage.html)
+    cmds:
+      - go test ./... -covermode=count -coverprofile=coverage.out gcflags=all=-l -timeout 30s
+      - go tool cover -html=./coverage.out -o ./coverage.html

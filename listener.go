@@ -2,15 +2,7 @@ package event
 
 import "fmt"
 
-type Listener[K any] interface {
-	On(evnt K)
-}
-
-type ListenerFn[K any] func(evnt K)
-
-func (fn ListenerFn[K]) On(evnt K) {
-	fn(evnt)
-}
+type Listener[K any] func(evnt K)
 
 type QueueData[K any] struct {
 	event  K
@@ -67,7 +59,7 @@ func (me *ListenerItem[K]) onEvent(data *QueueData[K]) {
 	}()
 
 	lgr.Info(LogTypeListenerBegin, fmt.Sprint("begin to send event to", me))
-	(me.listener).On(data.event)
+	me.listener(data.event)
 	lgr.Info(LogTypeListenerOk, fmt.Sprint("successfully send event to ", me))
 }
 
