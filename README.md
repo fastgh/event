@@ -19,7 +19,7 @@
     "fmt"
 
     "github.com/fastgh/go-event"
-    "github.com/fastgh/go-event/loggers"
+    "github.com/fastgh/go-event/loggers/std"
   )
 
   type MyEvent struct {
@@ -27,7 +27,7 @@
   }
 
   func main() {
-    myHub := event.NewHub("default", loggers.NewDefaultGlobalStdLogger())
+    myHub := event.NewHub("default", std.NewDefaultGlobalStdLogger())
 
     myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
 
