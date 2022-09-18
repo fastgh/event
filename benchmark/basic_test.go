@@ -12,14 +12,18 @@ type BenchmarkEvent struct {
 	Address string
 }
 
-func BenchmarkRepeat(b *testing.B) {
+func Benchmark_10_listeners_and_queueSize_is_100(b *testing.B) {
+	doBenchmark(b, 10, 100)
+}
+
+func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32) {
 	myHub := event.NewHub("benchmark", nil)
 	myTopic := event.CreateTopic(myHub, "myTopic", BenchmarkEvent{})
 
-	for i := 0; i < 100; i++ {
-		myTopic.Sub(fmt.Sprintf("listener %d", i), func(e BenchmarkEvent) {
+	for i := 0; i < amountOfSub; i++ {
+		myTopic.Sub(fmt.Sprintf("sub %d", i), func(e BenchmarkEvent) {
 			// do nothing
-		}, 0)
+		}, queueSize)
 	}
 
 	b.ResetTimer()

@@ -9,7 +9,7 @@ type EventListener[K any] struct {
 	logr  ListenerLogger
 }
 
-func NewEventListener[K any](name string, lsner Listener[K], qSize int, topicLogr TopicLogger) *EventListener[K] {
+func NewEventListener[K any](name string, lsner Listener[K], qSize uint32, topicLogr TopicLogger) *EventListener[K] {
 	return &EventListener[K]{
 		name:  name,
 		lsner: lsner,

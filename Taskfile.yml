@@ -53,5 +53,5 @@ tasks:
   benchmark:
     desc: test benchmark
     cmds:
-      - go test -bench=Benchmark -run=none ./benchmark
+      - go test -bench=Benchmark -run=none ./benchmark -benchtime=3s
       

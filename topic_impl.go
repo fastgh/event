@@ -42,7 +42,7 @@ func (me *TopicImpl[K]) CurrEventId() EventId { return EventId(me.eid.Load()) }
 
 func (me *TopicImpl[K]) NewEventId() EventId { return EventId(me.eid.Add(1)) }
 
-func (me *TopicImpl[K]) Sub(name string, lsner Listener[K], qSize int) int {
+func (me *TopicImpl[K]) Sub(name string, lsner Listener[K], qSize uint32) int {
 	if lsner == nil {
 		panic(errors.New("listener cannot be nil"))
 	}
