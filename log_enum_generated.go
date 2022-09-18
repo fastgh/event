@@ -11,11 +11,11 @@ import (
 	"strings"
 )
 
-const _LogEnumName = "hub close beginhub close oklistener sub oklistener sub errlistener unsub oklistener unsub errlistener close beginlistener close oktopic register begintopic register oktopic close begintopic close okevent pub beginevent pub okevent pub errevent send beginevent send okevent send errevent handle beginevent handle okevent handle err"
+const _LogEnumName = "hub close beginhub close oklistener sub oklistener sub errlistener unsub oklistener unsub errlistener close beginlistener close oktopic register begintopic register oktopic close begintopic close okevent pub beginevent pub okevent send beginevent send okevent handle beginevent handle okevent handle err"
 
-var _LogEnumIndex = [...]uint16{0, 15, 27, 42, 58, 75, 93, 113, 130, 150, 167, 184, 198, 213, 225, 238, 254, 267, 281, 299, 314, 330}
+var _LogEnumIndex = [...]uint16{0, 15, 27, 42, 58, 75, 93, 113, 130, 150, 167, 184, 198, 213, 225, 241, 254, 272, 287, 303}
 
-const _LogEnumLowerName = "hub close beginhub close oklistener sub oklistener sub errlistener unsub oklistener unsub errlistener close beginlistener close oktopic register begintopic register oktopic close begintopic close okevent pub beginevent pub okevent pub errevent send beginevent send okevent send errevent handle beginevent handle okevent handle err"
+const _LogEnumLowerName = "hub close beginhub close oklistener sub oklistener sub errlistener unsub oklistener unsub errlistener close beginlistener close oktopic register begintopic register oktopic close begintopic close okevent pub beginevent pub okevent send beginevent send okevent handle beginevent handle okevent handle err"
 
 func (i LogEnum) String() string {
 	if i < 0 || i >= LogEnum(len(_LogEnumIndex)-1) {
@@ -42,16 +42,14 @@ func _LogEnumNoOp() {
 	_ = x[TopicCloseOk-(11)]
 	_ = x[EventPubBegin-(12)]
 	_ = x[EventPubOk-(13)]
-	_ = x[EventPubErr-(14)]
-	_ = x[EventSendBegin-(15)]
-	_ = x[EventSendOk-(16)]
-	_ = x[EventSendErr-(17)]
-	_ = x[EventHandleBegin-(18)]
-	_ = x[EventHandleOk-(19)]
-	_ = x[EventHandleErr-(20)]
+	_ = x[EventSendBegin-(14)]
+	_ = x[EventSendOk-(15)]
+	_ = x[EventHandleBegin-(16)]
+	_ = x[EventHandleOk-(17)]
+	_ = x[EventHandleErr-(18)]
 }
 
-var _LogEnumValues = []LogEnum{HubCloseBegin, HubCloseOk, ListenerSubOk, ListenerSubErr, ListenerUnsubOk, ListenerUnsubErr, ListenerCloseBegin, ListenerCloseOk, TopicRegisterBegin, TopicRegisterOk, TopicCloseBegin, TopicCloseOk, EventPubBegin, EventPubOk, EventPubErr, EventSendBegin, EventSendOk, EventSendErr, EventHandleBegin, EventHandleOk, EventHandleErr}
+var _LogEnumValues = []LogEnum{HubCloseBegin, HubCloseOk, ListenerSubOk, ListenerSubErr, ListenerUnsubOk, ListenerUnsubErr, ListenerCloseBegin, ListenerCloseOk, TopicRegisterBegin, TopicRegisterOk, TopicCloseBegin, TopicCloseOk, EventPubBegin, EventPubOk, EventSendBegin, EventSendOk, EventHandleBegin, EventHandleOk, EventHandleErr}
 
 var _LogEnumNameToValueMap = map[string]LogEnum{
 	_LogEnumName[0:15]:         HubCloseBegin,
@@ -82,20 +80,16 @@ var _LogEnumNameToValueMap = map[string]LogEnum{
 	_LogEnumLowerName[198:213]: EventPubBegin,
 	_LogEnumName[213:225]:      EventPubOk,
 	_LogEnumLowerName[213:225]: EventPubOk,
-	_LogEnumName[225:238]:      EventPubErr,
-	_LogEnumLowerName[225:238]: EventPubErr,
-	_LogEnumName[238:254]:      EventSendBegin,
-	_LogEnumLowerName[238:254]: EventSendBegin,
-	_LogEnumName[254:267]:      EventSendOk,
-	_LogEnumLowerName[254:267]: EventSendOk,
-	_LogEnumName[267:281]:      EventSendErr,
-	_LogEnumLowerName[267:281]: EventSendErr,
-	_LogEnumName[281:299]:      EventHandleBegin,
-	_LogEnumLowerName[281:299]: EventHandleBegin,
-	_LogEnumName[299:314]:      EventHandleOk,
-	_LogEnumLowerName[299:314]: EventHandleOk,
-	_LogEnumName[314:330]:      EventHandleErr,
-	_LogEnumLowerName[314:330]: EventHandleErr,
+	_LogEnumName[225:241]:      EventSendBegin,
+	_LogEnumLowerName[225:241]: EventSendBegin,
+	_LogEnumName[241:254]:      EventSendOk,
+	_LogEnumLowerName[241:254]: EventSendOk,
+	_LogEnumName[254:272]:      EventHandleBegin,
+	_LogEnumLowerName[254:272]: EventHandleBegin,
+	_LogEnumName[272:287]:      EventHandleOk,
+	_LogEnumLowerName[272:287]: EventHandleOk,
+	_LogEnumName[287:303]:      EventHandleErr,
+	_LogEnumLowerName[287:303]: EventHandleErr,
 }
 
 var _LogEnumNames = []string{
@@ -113,13 +107,11 @@ var _LogEnumNames = []string{
 	_LogEnumName[184:198],
 	_LogEnumName[198:213],
 	_LogEnumName[213:225],
-	_LogEnumName[225:238],
-	_LogEnumName[238:254],
-	_LogEnumName[254:267],
-	_LogEnumName[267:281],
-	_LogEnumName[281:299],
-	_LogEnumName[299:314],
-	_LogEnumName[314:330],
+	_LogEnumName[225:241],
+	_LogEnumName[241:254],
+	_LogEnumName[254:272],
+	_LogEnumName[272:287],
+	_LogEnumName[287:303],
 }
 
 // LogEnumString retrieves an enum value from the enum constants string name.

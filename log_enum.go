@@ -22,11 +22,9 @@ const (
 
 	EventPubBegin
 	EventPubOk
-	EventPubErr
 
 	EventSendBegin
 	EventSendOk
-	EventSendErr
 
 	EventHandleBegin
 	EventHandleOk

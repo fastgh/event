@@ -53,5 +53,5 @@ tasks:
   benchmark:
     desc: test benchmark
     cmds:
-      - go test -bench=Benchmark -run=none ./benchmark -benchtime=3s
+      - go test -run=none ./benchmark -benchtime=1s -bench=Benchmark  #-cpu=1,8,16,32,64,128,256
       

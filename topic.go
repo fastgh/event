@@ -4,6 +4,14 @@ import (
 	"reflect"
 )
 
+type PubMode byte
+
+const (
+	PubModeSync PubMode = iota
+	PubModeAsync
+	PubModeAuto
+)
+
 type TopicBase interface {
 	Name() string
 	Hub() Hub
@@ -19,7 +27,7 @@ type Topic[K any] interface {
 	TopicBase
 
 	Sub(name string, lsner Listener[K], qSize uint32) int
-	Pub(async bool, evnt K)
+	Pub(mode PubMode, evnt K)
 }
 
 func NewTopic[K any](name string, hub Hub, evntExample K, logr HubLogger) Topic[K] {

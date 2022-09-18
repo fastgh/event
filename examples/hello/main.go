@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("listener2 - got event from", e)
 	}, 0)
 
-	myTopic.Pub(false, MyEvent{"fastgh"})
+	myTopic.Pub(event.PubModeAuto, MyEvent{"fastgh"})
 
 	myHub.Close(true)
 }

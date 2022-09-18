@@ -56,12 +56,6 @@ func (me *EventListener[K]) onEvent(evnt Event) {
 func (me *EventListener[K]) SendEvent(evnt Event) {
 	logr := me.logr
 
-	defer func() {
-		if p := recover(); p != nil {
-			logr.LogEventError(EventSendErr, evnt, p)
-		}
-	}()
-
 	logr.LogEventDebug(EventSendBegin, evnt)
 	me.q <- evnt
 	logr.LogEventDebug(EventSendOk, evnt)
