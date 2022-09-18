@@ -1,4 +1,4 @@
-package event
+package fgevent
 
 type Listener[K any] func(evnt K)
 

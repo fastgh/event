@@ -8,7 +8,7 @@
 
 # Install
   ```go
-  go get github.com/fastgh/event
+  go get github.com/fastgh/go-event
   ```
 
 # Example
@@ -18,8 +18,8 @@
   import (
     "fmt"
 
-    "github.com/fastgh/event"
-    "github.com/fastgh/event/loggers"
+    "github.com/fastgh/go-event"
+    "github.com/fastgh/go-event/loggers"
   )
 
   type MyEvent struct {
@@ -27,9 +27,9 @@
   }
 
   func main() {
-    myHub := event.NewHub("default", loggers.NewDefaultGlobalStdLogger())
+    myHub := fgevent.NewHub("default", loggers.NewDefaultGlobalStdLogger())
 
-    myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
+    myTopic := fgevent.CreateTopic(myHub, "myTopic", MyEvent{})
 
     myTopic.Sub("listener1", func(e MyEvent) {
       fmt.Println("listener1 - got event from", e)
@@ -39,7 +39,7 @@
       fmt.Println("listener2 - got event from", e)
     }, 0)
 
-    myTopic.Pub(event.PubModeAuto, MyEvent{"fastgh"})
+    myTopic.Pub(fgevent.PubModeAuto, MyEvent{"fastgh"})
 
     myHub.Close(true)
   }

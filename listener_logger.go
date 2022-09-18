@@ -1,4 +1,4 @@
-package event
+package fgevent
 
 type ListenerLoggerT struct {
 	logr  TopicLogger

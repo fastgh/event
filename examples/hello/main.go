@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/fastgh/event"
-	"github.com/fastgh/event/loggers"
+	fgevent "github.com/fastgh/go-event"
+	"github.com/fastgh/go-event/loggers/std"
 )
 
 type MyEvent struct {
@@ -12,9 +12,9 @@ type MyEvent struct {
 }
 
 func main() {
-	myHub := event.NewHub("default", loggers.NewDefaultGlobalStdLogger())
+	myHub := fgevent.NewHub("default", std.NewDefaultGlobalStdLogger())
 
-	myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
+	myTopic := fgevent.CreateTopic(myHub, "myTopic", MyEvent{})
 
 	myTopic.Sub("listener1", func(e MyEvent) {
 		fmt.Println("listener1 - got event from", e)
@@ -24,7 +24,7 @@ func main() {
 		fmt.Println("listener2 - got event from", e)
 	}, 0)
 
-	myTopic.Pub(event.PubModeAuto, MyEvent{"fastgh"})
+	myTopic.Pub(fgevent.PubModeAuto, MyEvent{"fastgh"})
 
 	myHub.Close(true)
 }

@@ -1,4 +1,4 @@
-package event
+package fgevent
 
 type HubLoggerT struct {
 	hub  string
