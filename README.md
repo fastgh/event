@@ -1,5 +1,4 @@
-# Event
-  Type-safe in-process pub/sub event library, for Go language
+# Type-safe in-process pub/sub event library, for Go language
 
 # Features
   - Type-safe: every kind of event is a concrete go type instead of error-prone interface{} or map[string]interface{}. Unmatched event is rejected.
