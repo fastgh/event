@@ -49,3 +49,9 @@ tasks:
     cmds:
       - go test ./... -covermode=count -coverprofile=coverage.out gcflags=all=-l -timeout 30s
       - go tool cover -html=./coverage.out -o ./coverage.html
+
+  benchmark:
+    desc: test benchmark
+    cmds:
+      - go test -bench=Benchmark -run=none ./benchmark
+      
