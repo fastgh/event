@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	fgevent "github.com/fastgh/go-event"
+	"github.com/fastgh/go-event"
 	ps "github.com/phuslu/log"
 )
 
@@ -34,47 +34,47 @@ func NewDefaultPhusluLogger() PhusluLogger {
 
 func (me PhusluLogger) Target() *ps.Logger { return me.target }
 
-func (me PhusluLogger) LogDebug(enm fgevent.LogEnum, hub string, topic string, lsner string) {
+func (me PhusluLogger) LogDebug(enm event.LogEnum, hub string, topic string, lsner string) {
 	me.target.Debug().Str("hub", hub).Str("topic", topic).Str("listener", lsner).Msg(enm.String())
 }
 
-func (me PhusluLogger) LogInfo(enm fgevent.LogEnum, hub string, topic string, lsner string) {
+func (me PhusluLogger) LogInfo(enm event.LogEnum, hub string, topic string, lsner string) {
 	me.target.Info().Str("hub", hub).Str("topic", topic).Str("listener", lsner).Msg(enm.String())
 }
 
-func (me PhusluLogger) LogError(enm fgevent.LogEnum, hub string, topic string, lsner string, err any) {
+func (me PhusluLogger) LogError(enm event.LogEnum, hub string, topic string, lsner string, err any) {
 	entry := me.target.Error().Str("hub", hub).Str("topic", topic).Str("listener", lsner)
 	PhusluMarshalAnyError(entry, err)
 	entry.Msg(enm.String())
 }
 
-func (me PhusluLogger) LogEventDebug(enm fgevent.LogEnum, lsner string, evnt fgevent.Event) {
+func (me PhusluLogger) LogEventDebug(enm event.LogEnum, lsner string, evnt event.Event) {
 	me.target.Debug().Object("event", evnt).Str("listener", lsner).Msg(enm.String())
 }
 
-func (me PhusluLogger) LogEventInfo(enm fgevent.LogEnum, lsner string, evnt fgevent.Event) {
+func (me PhusluLogger) LogEventInfo(enm event.LogEnum, lsner string, evnt event.Event) {
 	me.target.Info().Object("event", evnt).Str("listener", lsner).Msg(enm.String())
 }
 
-func (me PhusluLogger) LogEventError(enm fgevent.LogEnum, lsner string, evnt fgevent.Event, err any) {
+func (me PhusluLogger) LogEventError(enm event.LogEnum, lsner string, evnt event.Event, err any) {
 	entry := me.target.Error().Object("event", evnt).Str("listener", lsner)
 	PhusluMarshalAnyError(entry, err)
 	entry.Msg(enm.String())
 }
 
-func PhusluLogLevel(level fgevent.LogLevel) ps.Level {
+func PhusluLogLevel(level event.LogLevel) ps.Level {
 	switch level {
-	case fgevent.LogLevelAnyway:
+	case event.LogLevelAnyway:
 		return ps.TraceLevel
 
-	case fgevent.LogLevelDebug:
+	case event.LogLevelDebug:
 		return ps.DebugLevel
-	case fgevent.LogLevelInfo:
+	case event.LogLevelInfo:
 		return ps.InfoLevel
-	case fgevent.LogLevelError:
+	case event.LogLevelError:
 		return ps.ErrorLevel
 
-	case fgevent.LogLevelSilient:
+	case event.LogLevelSilient:
 		return ps.ErrorLevel
 
 	default:

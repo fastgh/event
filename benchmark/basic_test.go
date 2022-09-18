@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	fgevent "github.com/fastgh/go-event"
+	"github.com/fastgh/go-event"
 )
 
 type BenchmarkEvent struct {
@@ -101,8 +101,8 @@ func Benchmark_1000_listeners_and_queueSize_is_100_parallel(b *testing.B) {
 }
 
 func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32, parallel bool) {
-	myHub := fgevent.NewHub("benchmark", nil)
-	myTopic := fgevent.CreateTopic(myHub, "myTopic", BenchmarkEvent{})
+	myHub := event.NewHub("benchmark", nil)
+	myTopic := event.CreateTopic(myHub, "myTopic", BenchmarkEvent{})
 
 	for i := 0; i < amountOfSub; i++ {
 		myTopic.Sub(fmt.Sprintf("sub %d", i), func(e BenchmarkEvent) {
@@ -115,12 +115,12 @@ func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32, parallel bool)
 	if parallel {
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
-				myTopic.Pub(fgevent.PubModeSync, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/fgevent"})
+				myTopic.Pub(event.PubModeSync, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
 			}
 		})
 	} else {
 		for i := 0; i < b.N; i++ {
-			myTopic.Pub(fgevent.PubModeAuto, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/fgevent"})
+			myTopic.Pub(event.PubModeAuto, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
 		}
 	}
 
