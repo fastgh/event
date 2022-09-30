@@ -105,7 +105,7 @@ func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32, parallel bool)
 	myTopic := event.CreateTopic(myHub, "myTopic", BenchmarkEvent{})
 
 	for i := 0; i < amountOfSub; i++ {
-		myTopic.Sub(fmt.Sprintf("sub %d", i), func(e BenchmarkEvent) {
+		myTopic.SubP(fmt.Sprintf("sub %d", i), func(e BenchmarkEvent) {
 			// do nothing
 		}, queueSize)
 	}

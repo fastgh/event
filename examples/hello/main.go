@@ -16,11 +16,11 @@ func main() {
 
 	myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
 
-	myTopic.Sub("listener1", func(e MyEvent) {
+	myTopic.SubP("listener1", func(e MyEvent) {
 		fmt.Println("listener1 - got event from", e)
 	}, 0)
 
-	myTopic.Sub("listener2", func(e MyEvent) {
+	myTopic.SubP("listener2", func(e MyEvent) {
 		fmt.Println("listener2 - got event from", e)
 	}, 0)
 
