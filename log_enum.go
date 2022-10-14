@@ -3,7 +3,8 @@ package event
 type LogEnum int64
 
 const (
-	HubCloseBegin LogEnum = iota
+	_ LogEnum = iota
+	HubCloseBegin
 	HubCloseOk
 
 	ListenerSubOk

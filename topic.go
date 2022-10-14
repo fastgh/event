@@ -7,7 +7,8 @@ import (
 type PubMode byte
 
 const (
-	PubModeSync PubMode = iota
+	_ PubMode = iota
+	PubModeSync
 	PubModeAsync
 	PubModeAuto
 )

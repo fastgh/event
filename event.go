@@ -43,7 +43,7 @@ func NewCloseEvent(id EventId, hub string, topic string) Event {
 func (me Event) String() string {
 	bytes, err := json.Marshal(me)
 	if err != nil {
-		panic(errors.Wrap(err, "failed to marshal event"))
+		panic(errors.Wrap(err, "marshal event"))
 	}
 	return string(bytes)
 }

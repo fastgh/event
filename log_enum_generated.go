@@ -18,8 +18,9 @@ var _LogEnumIndex = [...]uint16{0, 15, 27, 42, 58, 75, 93, 113, 130, 150, 167, 1
 const _LogEnumLowerName = "hub close beginhub close oklistener sub oklistener sub errlistener unsub oklistener unsub errlistener close beginlistener close oktopic register begintopic register oktopic close begintopic close okevent pub beginevent pub okevent send beginevent send okevent handle beginevent handle okevent handle err"
 
 func (i LogEnum) String() string {
+	i -= 1
 	if i < 0 || i >= LogEnum(len(_LogEnumIndex)-1) {
-		return fmt.Sprintf("LogEnum(%d)", i)
+		return fmt.Sprintf("LogEnum(%d)", i+1)
 	}
 	return _LogEnumName[_LogEnumIndex[i]:_LogEnumIndex[i+1]]
 }
@@ -28,25 +29,25 @@ func (i LogEnum) String() string {
 // Re-run the stringer command to generate them again.
 func _LogEnumNoOp() {
 	var x [1]struct{}
-	_ = x[HubCloseBegin-(0)]
-	_ = x[HubCloseOk-(1)]
-	_ = x[ListenerSubOk-(2)]
-	_ = x[ListenerSubErr-(3)]
-	_ = x[ListenerUnsubOk-(4)]
-	_ = x[ListenerUnsubErr-(5)]
-	_ = x[ListenerCloseBegin-(6)]
-	_ = x[ListenerCloseOk-(7)]
-	_ = x[TopicRegisterBegin-(8)]
-	_ = x[TopicRegisterOk-(9)]
-	_ = x[TopicCloseBegin-(10)]
-	_ = x[TopicCloseOk-(11)]
-	_ = x[EventPubBegin-(12)]
-	_ = x[EventPubOk-(13)]
-	_ = x[EventSendBegin-(14)]
-	_ = x[EventSendOk-(15)]
-	_ = x[EventHandleBegin-(16)]
-	_ = x[EventHandleOk-(17)]
-	_ = x[EventHandleErr-(18)]
+	_ = x[HubCloseBegin-(1)]
+	_ = x[HubCloseOk-(2)]
+	_ = x[ListenerSubOk-(3)]
+	_ = x[ListenerSubErr-(4)]
+	_ = x[ListenerUnsubOk-(5)]
+	_ = x[ListenerUnsubErr-(6)]
+	_ = x[ListenerCloseBegin-(7)]
+	_ = x[ListenerCloseOk-(8)]
+	_ = x[TopicRegisterBegin-(9)]
+	_ = x[TopicRegisterOk-(10)]
+	_ = x[TopicCloseBegin-(11)]
+	_ = x[TopicCloseOk-(12)]
+	_ = x[EventPubBegin-(13)]
+	_ = x[EventPubOk-(14)]
+	_ = x[EventSendBegin-(15)]
+	_ = x[EventSendOk-(16)]
+	_ = x[EventHandleBegin-(17)]
+	_ = x[EventHandleOk-(18)]
+	_ = x[EventHandleErr-(19)]
 }
 
 var _LogEnumValues = []LogEnum{HubCloseBegin, HubCloseOk, ListenerSubOk, ListenerSubErr, ListenerUnsubOk, ListenerUnsubErr, ListenerCloseBegin, ListenerCloseOk, TopicRegisterBegin, TopicRegisterOk, TopicCloseBegin, TopicCloseOk, EventPubBegin, EventPubOk, EventSendBegin, EventSendOk, EventHandleBegin, EventHandleOk, EventHandleErr}
