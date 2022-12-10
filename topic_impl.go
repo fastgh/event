@@ -85,7 +85,11 @@ func (me *TopicImpl[K]) UnSub(name string) bool {
 	lsners := me.lsners
 	for i, existing := range lsners {
 		if existing.name == name {
-			me.lsners = append(lsners[:i], lsners[i+1])
+			if i == len(lsners)-1 {
+				me.lsners = lsners[:i]
+			} else {
+				me.lsners = append(lsners[:i], lsners[i+1])
+			}
 			me.logr.LogInfo(ListenerUnsubOk, name)
 
 			stopEvent := NewCloseEvent(me.NewEventId(), me.Hub().Name(), me.name)
