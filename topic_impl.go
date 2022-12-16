@@ -102,7 +102,7 @@ func (me *TopicImpl[K]) UnSub(name string) bool {
 	return false
 }
 
-func (me *TopicImpl[K]) Pub(mode PubMode, sender any, evnt K) {
+func (me *TopicImpl[K]) Pub(mode PubMode, sender any, evntData K) {
 	var async bool
 	if mode == PubModeAsync {
 		async = true
@@ -112,16 +112,23 @@ func (me *TopicImpl[K]) Pub(mode PubMode, sender any, evnt K) {
 		async = len(me.lsners) >= 100
 	}
 
+	evnt := NewDataEvent(me.NewEventId(), sender, me.Hub().name, me.name, evntData)
+
 	if async {
-		go me.doPub(sender, evnt)
+		go func() {
+			defer func() {
+				if p := recover(); p != nil {
+					me.hub.Logger().LogEventError(EventPubError, "", evnt, p)
+				}
+			}()
+			me.doPub(sender, evnt)
+		}()
 	} else {
 		me.doPub(sender, evnt)
 	}
 }
 
-func (me *TopicImpl[K]) doPub(sender any, evntData K) {
-	evnt := NewDataEvent(me.NewEventId(), sender, me.Hub().name, me.name, evntData)
-
+func (me *TopicImpl[K]) doPub(sender any, evnt Event) {
 	me.mx.RLock()
 	defer me.mx.RUnlock()
 

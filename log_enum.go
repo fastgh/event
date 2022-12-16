@@ -22,6 +22,7 @@ const (
 	TopicCloseOk
 
 	EventPubBegin
+	EventPubError
 	EventPubOk
 
 	EventSendBegin
