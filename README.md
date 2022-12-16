@@ -39,7 +39,7 @@
       fmt.Println("listener2 - got event from", e)
     }, 0)
 
-    myTopic.Pub(event.PubModeAuto, MyEvent{"fastgh"})
+    myTopic.Pub(event.PubModeAuto, nil, MyEvent{"fastgh"})
 
     myHub.Close(true)
   }
