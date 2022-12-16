@@ -11,32 +11,35 @@ import (
 type EventId int64
 
 type EventT struct {
-	Id    EventId
-	Hub   string
-	Topic string
-	Close bool
-	Data  any
+	Id     EventId
+	Sender any
+	Hub    string
+	Topic  string
+	Close  bool
+	Data   any
 }
 
 type Event = *EventT
 
-func NewDataEvent(id EventId, hub string, topic string, dat any) Event {
+func NewDataEvent(id EventId, sender any, hub string, topic string, dat any) Event {
 	return &EventT{
-		Id:    id,
-		Hub:   hub,
-		Topic: topic,
-		Data:  dat,
-		Close: false,
+		Id:     id,
+		Sender: sender,
+		Hub:    hub,
+		Topic:  topic,
+		Data:   dat,
+		Close:  false,
 	}
 }
 
 func NewCloseEvent(id EventId, hub string, topic string) Event {
 	return &EventT{
-		Id:    id,
-		Hub:   hub,
-		Topic: topic,
-		Data:  nil,
-		Close: true,
+		Id:     id,
+		Sender: nil,
+		Hub:    hub,
+		Topic:  topic,
+		Data:   nil,
+		Close:  true,
 	}
 }
 

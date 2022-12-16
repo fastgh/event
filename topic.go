@@ -29,7 +29,7 @@ type Topic[K any] interface {
 
 	SubP(name string, lsner Listener[K], qSize uint32) int
 	Sub(name string, lsner Listener[K], qSize uint32) (int, error)
-	Pub(mode PubMode, evnt K)
+	Pub(mode PubMode, sender any, evnt K)
 }
 
 func NewTopic[K any](name string, hub Hub, evntExample K, logr HubLogger) Topic[K] {

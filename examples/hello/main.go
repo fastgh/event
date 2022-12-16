@@ -16,15 +16,15 @@ func main() {
 
 	myTopic := event.CreateTopic(myHub, "myTopic", MyEvent{})
 
-	myTopic.SubP("listener1", func(e MyEvent) {
+	myTopic.SubP("listener1", func(_ any, e MyEvent) {
 		fmt.Println("listener1 - got event from", e)
 	}, 0)
 
-	myTopic.SubP("listener2", func(e MyEvent) {
+	myTopic.SubP("listener2", func(_ any, e MyEvent) {
 		fmt.Println("listener2 - got event from", e)
 	}, 0)
 
-	myTopic.Pub(event.PubModeAuto, MyEvent{"fastgh"})
+	myTopic.Pub(event.PubModeAuto, nil, MyEvent{"fastgh"})
 
 	myHub.Close(true)
 }

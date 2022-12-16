@@ -105,7 +105,7 @@ func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32, parallel bool)
 	myTopic := event.CreateTopic(myHub, "myTopic", BenchmarkEvent{})
 
 	for i := 0; i < amountOfSub; i++ {
-		myTopic.SubP(fmt.Sprintf("sub %d", i), func(e BenchmarkEvent) {
+		myTopic.SubP(fmt.Sprintf("sub %d", i), func(_ any, e BenchmarkEvent) {
 			// do nothing
 		}, queueSize)
 	}
@@ -115,12 +115,12 @@ func doBenchmark(b *testing.B, amountOfSub int, queueSize uint32, parallel bool)
 	if parallel {
 		b.RunParallel(func(pb *testing.PB) {
 			for pb.Next() {
-				myTopic.Pub(event.PubModeSync, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
+				myTopic.Pub(event.PubModeSync, nil, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
 			}
 		})
 	} else {
 		for i := 0; i < b.N; i++ {
-			myTopic.Pub(event.PubModeAuto, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
+			myTopic.Pub(event.PubModeAuto, nil, BenchmarkEvent{Name: "fastgh", Address: "github.com/fastgh/go-event"})
 		}
 	}
 
