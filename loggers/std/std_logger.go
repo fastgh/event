@@ -3,7 +3,7 @@ package std
 import (
 	"log"
 
-	"github.com/fastgh/go-event"
+	"github.com/qiangyt/go-event"
 )
 
 type StdLoggerT struct {

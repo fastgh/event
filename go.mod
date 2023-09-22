@@ -1,4 +1,4 @@
-module github.com/fastgh/go-event
+module github.com/qiangyt/go-event
 
 go 1.18
 

@@ -8,7 +8,7 @@
 
 # Install
   ```go
-  go get github.com/fastgh/go-event
+  go get github.com/qiangyt/go-event
   ```
 
 # Example
@@ -18,8 +18,8 @@
   import (
     "fmt"
 
-    "github.com/fastgh/go-event"
-    "github.com/fastgh/go-event/loggers/std"
+    "github.com/qiangyt/go-event"
+    "github.com/qiangyt/go-event/loggers/std"
   )
 
   type MyEvent struct {
